@@ -1,0 +1,72 @@
+* {
+
+    box-sizing: border-box; 
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    background-color: rgb(39,39,39);
+    color:white;
+    font-family: 'Fira Sans', sans-serif;
+}
+
+#renderer {
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(255, 255, 255, 0.05);
+    position: relative;
+}
+
+.dot {
+    background-color: white;
+    position: absolute;
+    border-radius: 100%;
+}
+
+.bar {
+    background-color: white;
+    position: absolute;
+}
+
+#toggleViewButton {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 150px;
+    height: 40px;
+    line-height: 40px;
+    font-size: 20px;
+    text-align: center;
+    background-color: #777;
+    border-radius: 3%;
+}
+
+#hoverLabel, #clickLabel  {
+    background-color: rgb(87, 87, 87);
+    position: absolute;
+    padding: 0 5px;
+    line-height: 30px;
+    display: none;
+    z-index: 1000;
+}
+
+/*  das HoverLabel in die Z-Richtung an forderster Stelle. */
+#hoverLabel {
+    z-index: 1001;
+}
+
+#hoverLabel.active, #clickLabel.active  {
+    display: block;
+}
+
+/* Klasse / State: Hover über ein Land. */
+.hover {
+    background-color: gray;
+}
+
+/* Klasse / State: Land wurde geklickt */
+.clicked {
+    background-color: #FF0000;
+}
