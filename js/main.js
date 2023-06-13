@@ -9,21 +9,32 @@ $(function () {
     stageHeight = renderer.innerHeight();
     stageWidth = renderer.innerWidth();
 
-    /* Funktion, um die Daten der Einwohnerzahl und der geografischen 
-    Eigenschaften vorzubereiten. */
+    prepareData();
 
     drawDots();
 });
 
+/* Funktion um Daten vorzubereiten Merge und delete */
+function prepareData() {
+let mergedCountryData = gmynd.mergeData(countryData, countryPosition, "iso_code", "alpha3Code");
+console.log(mergedCountryData);
+}
 
 function drawDots() {
 
 
-    /* Land mit der größten Bevölkerungszahl wird ermittelt. */
-    const gdpMax = gmynd.dataMax(countryData, "energy_per_gdp");
+    /* Maxima werden ermittelt */
+    const gdpMax = gmynd.dataMax(countryData, "gdp");
     const energyMax = gmynd.dataMax(countryData, "primary_energy_consumption");
+    const fossilFuelEnergyMax = gmynd.dataMax(countryData, "fossil_fuel_consumption");
+    const renewableEnergyMax = gmynd.dataMax(countryData, "renewable_energy_consumption");
+    const lowCarbonEnergyMax = gmynd.dataMax(countryData, "low_carbon_energy_consumption");
+    
     console.log("Gdp Max:" + gdpMax);
     console.log("Energy Max:" + energyMax);
+    console.log("Fossil Fuel Max:" + fossilFuelEnergyMax);
+    console.log("Renewable Energy Max:" + renewableEnergyMax);
+    console.log("Low Carbon Max:" + lowCarbonEnergyMax);
 
     /* Iteration durch alle Datensätze, um den Radius (Bevälkerungsdichte) und
     die x- und y-Position für jedes Land zu ermitteln. */
