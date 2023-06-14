@@ -38,30 +38,19 @@ function drawDots() {
 
     /* Iteration durch alle Datensätze, um den Radius (Bevälkerungsdichte) und
     die x- und y-Position für jedes Land zu ermitteln. */
-    countryData.forEach(country => {
-        // Map rechnete eine Skala/Wertebereich auf die/den andere um.
-        /* let mappedValue = gmynd.map(
-        1. Der Wert, der umgerechnet werden soll
-        2. Anfangswert des aktuellen Wertebereichs
-        3. Endwert des aktuellen WB
-        4. Anfangswert des neuen WB
-        5. Endwert des neuen WB
-        )*/
+    mergedCountryDatacountryData.forEach(country => {
 
 
 
-        /* x-Position für GDP */
-        const x = gmynd.map(country.energy_per_gdp, 0, gdpMax, 0, stageWidth);
+        //Längen- und Breitengrad werden in x- und y-Position umgerechnet
+        const x = gmynd.map(iso_code.longitude, -180, 180, 0, stageWidth);
+        const y = gmynd.map(iso_code.latitude, -90, 90, stageHeight, 0);
 
-        /* y-Position für consumed energy */
-        const y = gmynd.map(country.primary_energy_consumption, energyMax, 0, 0, stageHeight);
+        let dotFossil = $('<div></div>');
 
+        dotFossil.addClass('dotFossil')
 
-        let dot = $('<div></div>');
-
-        dot.addClass('dot')
-
-        dot.css({
+        dotFossil.css({
             'height': r,
             'width': r,
             'background-color': 'white',
@@ -70,6 +59,39 @@ function drawDots() {
             'top': y,
             'border-radius': '50%'
         });
-        renderer.append(dot);
+        renderer.append(dotFossil);
+
+        
+        let dotRenewable = $('<div></div>');
+
+        dotRenewable.addClass('dotRenewable')
+
+       dotRenewable.css({
+            'height': r,
+            'width': r,
+            'background-color': 'white',
+            'position': 'absolute',
+            'left': x,
+            'top': y,
+            'border-radius': '50%'
+        });
+        renderer.append(dotRenewable);
+
+
+        let dotLowCarbon = $('<div></div>');
+
+        dotLowCarbon.addClass('dotLowCarbon')
+
+        dotLowCarbon.css({
+            'height': r,
+            'width': r,
+            'background-color': 'white',
+            'position': 'absolute',
+            'left': x,
+            'top': y,
+            'border-radius': '50%'
+        });
+        renderer.append(dotLowCarbon);
+
     });
 }
