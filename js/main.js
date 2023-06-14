@@ -11,19 +11,19 @@ $(function () {
 
     prepareData();
 
-    drawDots();
+    drawMap();
 });
+ console.log(countryPosition)
 
 /* Funktion um Daten vorzubereiten Merge und delete */
 function prepareData() {
 let mergedCountryData = gmynd.mergeData(countryData, countryPosition, "iso_code", "alpha3Code");
+
 console.log(mergedCountryData);
 }
 
-function drawDots() {
-
-
-    /* Maxima werden ermittelt */
+function drawMap() {
+     /* Maxima werden ermittelt */
     const gdpMax = gmynd.dataMax(countryData, "gdp");
     const energyMax = gmynd.dataMax(countryData, "primary_energy_consumption");
     const fossilFuelEnergyMax = gmynd.dataMax(countryData, "fossil_fuel_consumption");
@@ -38,11 +38,8 @@ function drawDots() {
 
     /* Iteration durch alle Datensätze, um den Radius (Bevälkerungsdichte) und
     die x- und y-Position für jedes Land zu ermitteln. */
-    mergedCountryDatacountryData.forEach(country => {
-
-
-
-        //Längen- und Breitengrad werden in x- und y-Position umgerechnet
+    mergedCountryData.forEach(iso_code => {
+     //Längen- und Breitengrad werden in x- und y-Position umgerechnet
         const x = gmynd.map(iso_code.longitude, -180, 180, 0, stageWidth);
         const y = gmynd.map(iso_code.latitude, -90, 90, stageHeight, 0);
 
