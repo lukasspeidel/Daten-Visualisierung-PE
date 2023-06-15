@@ -28,7 +28,7 @@ function prepareData() {
      console.log("Fossil Fuel Min:" + fossilFuelEnergyMin);
      console.log("Renewable Energy Min:" + renewableEnergyMin);
      console.log("Low Carbon Min:" + lowCarbonEnergyMin);
-/* console.log(mergedCountryData); */
+
 }
      const gdpMax = gmynd.dataMax(countryData, "GDP");
      const overallEnergyMax = gmynd.dataMax(countryData, "primary_energy_consumption");
