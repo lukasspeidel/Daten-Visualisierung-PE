@@ -18,10 +18,10 @@ $(function () {
 
     prepareData();
 
-    // drawMap();
+    drawMap();
 
     
-    const svg1 = createSVG(10, 10, 5, 100, 125, calculatePositions(10, 10, 5), {c1: 'red', c2: 'green', c3: 'blue'});
+/*     const svg1 = createSVG(10, 10, 5, 100, 125, calculatePositions(10, 10, 5), {c1: 'red', c2: 'green', c3: 'blue'});
     const svg2 = createSVG(50, 50, 50, 100, 125, calculatePositions(50, 50, 50), {c1: 'red', c2: 'green', c3: 'blue'});
     
     const frame1 = $(`<div class='frame' style='top: 80%; left: 50%; width: ${FRAME_WIDTH_MAX}px'></div>`);
@@ -29,7 +29,7 @@ $(function () {
     frame1.append(svg1);
     frame2.append(svg2);
 
-    renderer.append(frame1, frame2);
+    renderer.append(frame1, frame2); */
 });
 
 /* Funktion um Daten vorzubereiten Merge und delete */
@@ -80,7 +80,21 @@ function drawMap() {
         const rRenewables = gmynd.map(iso_code.renewables_consumption, renewableEnergyMin, renewableEnergyMax, 1, 100);
         const rLowCarbon = gmynd.map(iso_code.low_carbon_consumption, lowCarbonEnergyMin, lowCarbonEnergyMax, 1, 100);
 
-        let dotFossil = $('<div></div>');
+        let frame = $('<div></div>');
+
+        frame.addClass('frame')
+        
+        frame.css({
+            'height': 100,
+            'width': FRAME_WIDTH_MAX,
+            'background-color': 'white',
+            'position': 'absolute',
+            'left': x,
+            'top': y,
+        });
+        renderer.append(frame);
+        //Kreise werden erstellt
+/*         let dotFossil = $('<div></div>');
 
         dotFossil.addClass('dotFossil')
 
@@ -140,7 +154,7 @@ function drawMap() {
             'top': y,
             'border-radius': '50%'
         });
-        renderer.append(dotRenewable);
+        renderer.append(dotRenewable); */
 
     });
 }
