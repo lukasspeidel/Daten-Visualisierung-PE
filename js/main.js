@@ -2,8 +2,8 @@ let stageHeight;
 let stageWidth;
 let renderer;
 
-const RADIUS_MIN = 1;
-const RADIUS_MAX = 50;
+const RADIUS_MIN = 3;
+const RADIUS_MAX = 60;
 const FRAME_OFFSET_X = 0;
 
 const SVG_VIEWBOX_WIDTH = 200;
@@ -23,6 +23,7 @@ $(function () {
 
     drawMap();
 
+    //test();
 
 });
 
@@ -79,20 +80,57 @@ function calculatePositions(r1, r2, r3) {
     return {x1: -mx, y1: -my, x2: r2, y2: -my, x3:xi-mx, y3:-yi-my};
 }
 
+/* function test() {
+    circlePositions = calculatePositions(r1, r2, r3);
+    console.log(circlePositions);
+
+    let fossilCircle = $('<div></div>');
+    fossilCircle.addClass('fossilCircle');
+    fossilCircle.css({
+        'height': r1 * 2, 
+        'width': r1 * 2, 
+        'left': circlePositions.x1+testCords,
+        'top': circlePositions.y1+testCords,
+    });	
+    fossilCircle.appendTo(renderer);
+
+    let renewableCircle = $('<div></div>');
+    renewableCircle.addClass('renewableCircle');
+    renewableCircle.css({
+        'height': r2 * 2, 
+        'width': r2 * 2, 
+        'background-color': 'green',
+        'left': circlePositions.x2+testCords,
+        'top': circlePositions.y2+testCords,
+    });	
+    renewableCircle.appendTo(renderer);
+
+    let lowCarbonCircle = $('<div></div>');
+    lowCarbonCircle.addClass('lowCarbonCircle');
+    lowCarbonCircle.css({
+        'height': r3 * 2, 
+        'width': r3 * 2, 
+        'background-color': 'yellow',
+        'left': circlePositions.x3+testCords,
+        'top': circlePositions.y3+testCords,
+    });	
+    lowCarbonCircle.appendTo(renderer); 
+}   */ 
 
 
-
-    function drawMap() {
+ function drawMap() {
 
     countryData.forEach(iso_code => {
      //Längen- und Breitengrad werden in x- und y-Position umgerechnet
-        var x = gmynd.map(iso_code.longitude, -180, 180, 0, stageWidth);
-        var y = gmynd.map(iso_code.latitude, -90, 90, stageHeight, 0);
+        let x = gmynd.map(iso_code.longitude, -180, 180, 0, stageWidth);
+        let y = gmynd.map(iso_code.latitude, -90, 90, stageHeight, 0);
+
         
         //Radien für Kreise mappen
-        var r1 = gmynd.map(iso_code.fossil_fuel_consumption, fossilFuelEnergyMin, fossilFuelEnergyMax, 1, 200);
-        var r2 = gmynd.map(iso_code.renewables_consumption, renewableEnergyMin, renewableEnergyMax, 1, 100);
-        var r3 = gmynd.map(iso_code.low_carbon_consumption, lowCarbonEnergyMin, lowCarbonEnergyMax, 1, 100);
+        let r1 = gmynd.map(iso_code.fossil_fuel_consumption, fossilFuelEnergyMin, fossilFuelEnergyMax, RADIUS_MIN, RADIUS_MAX);
+        let r2 = gmynd.map(iso_code.renewables_consumption, renewableEnergyMin, renewableEnergyMax, RADIUS_MIN, RADIUS_MAX);
+        let r3 = gmynd.map(iso_code.low_carbon_consumption, lowCarbonEnergyMin, lowCarbonEnergyMax, RADIUS_MIN, RADIUS_MAX);
+        console.log(iso_code.country, r1, r2, r3);
 
         let frame = $('<div></div>');
 
@@ -105,69 +143,53 @@ function calculatePositions(r1, r2, r3) {
             'left': x,
             'top': y,
         });
+        frame.attr('data-country', iso_code.country);
         renderer.append(frame);
-
-        calculatePositions(r1, r2, r3);
         
-       var circlePositions = calculatePositions(r1, r2, r3);
+        const circlePositions = calculatePositions(r1, r2, r3);
 
-        console.log(circlePositions);
 
         let fossilCircle = $('<div></div>');
         fossilCircle.addClass('fossilCircle');
         fossilCircle.css({
-            'height': r1, 
-            'width': r1, 
+            'height': Math.round(r1*2), 
+            'width': Math.round(r1*2), 
             'background-color': 'red',
             'border-radius': '50%',
             'position': 'absolute',
-            'left': circlePositions.x1+FRAME_WIDTH_MAX/2,
-            'top': circlePositions.y1+FRAME_HEIGHT_MAX/2,
+            'left': circlePositions.x1+FRAME_HEIGHT_MAX/2,
+            'top': circlePositions.y1+FRAME_WIDTH_MAX/2,
         });	
+        fossilCircle.attr('data-value',  Math.round(r1*2))
         fossilCircle.appendTo(frame);
 
         let renewableCircle = $('<div></div>');
-        renewableCircle.addClass('fossilCircle');
+        renewableCircle.addClass('renewableCircle');
         renewableCircle.css({
-            'height': r2, 
-            'width': r2, 
-            'background-color': 'green',
+            'height': Math.round(r2*2), 
+            'width': Math.round(r2*2), 
             'border-radius': '50%',
             'position': 'absolute',
-            'left': circlePositions.x2+FRAME_WIDTH_MAX/2,
-            'top': circlePositions.y2+FRAME_HEIGHT_MAX/2,
+            'left': circlePositions.x2+FRAME_HEIGHT_MAX/2,
+            'top': circlePositions.y2+FRAME_WIDTH_MAX/2,
         });	
+        renewableCircle.attr('data-value',  Math.round(r2*2))
         renewableCircle.appendTo(frame);
 
         let lowCarbonCircle = $('<div></div>');
-        lowCarbonCircle.addClass('fossilCircle');
+        lowCarbonCircle.addClass('lowCarbonCircle');
         lowCarbonCircle.css({
-            'height': r3, 
-            'width': r3, 
-            'background-color': 'yellow',
+            'height': Math.round(r3*2), 
+            'width': Math.round(r3*2), 
             'border-radius': '50%',
             'position': 'absolute',
-            'left': circlePositions.x3+FRAME_WIDTH_MAX/2,
-            'top': circlePositions.y3+FRAME_HEIGHT_MAX/2,
+            'left': circlePositions.x3+FRAME_HEIGHT_MAX/2,
+            'top': circlePositions.y3+FRAME_WIDTH_MAX/2,
         });	
+        lowCarbonCircle.attr('data-value',  Math.round(r3*2))
         lowCarbonCircle.appendTo(frame);
     });
-}
+} 
+ 
 
 
-
-/* function createSVG(r1, r2, r3, cx, cy, positions, colors) {
-    const {x1, y1, x2, y2, x3, y3} = positions;
-    const {c1, c2, c3} = colors;
-
-    const svg = $(`
-        <svg viewBox="0 0 ${SVG_VIEWBOX_WIDTH} ${SVG_VIEWBOX_HEIGHT}">
-            <circle cx="${cx + x1}" cy="${cy + y1}" r="${r1}" fill="${c1}" />	
-            <circle cx="${cx + x2}" cy="${cy + y2}" r="${r2}" fill="${c2}" />
-            <circle cx="${cx + x3}" cy="${cy + y3}" r="${r3}" fill="${c3}" />
-            <circle class='midpoint' cx="${cx}" cy="${cy}" r="${2}"/>
-        </svg>
-    `)
-
-    return svg;
-} */
