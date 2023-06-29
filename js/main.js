@@ -3,13 +3,10 @@ let stageWidth;
 let renderer;
 
 const RADIUS_MIN = 3;
-const RADIUS_MAX = 60;
-const FRAME_OFFSET_X = 0;
+const RADIUS_MAX = 20;
 
-const SVG_VIEWBOX_WIDTH = 200;
-const SVG_VIEWBOX_HEIGHT = 250;
 
-const FRAME_WIDTH_MAX = 4 * RADIUS_MAX + FRAME_OFFSET_X;
+const FRAME_WIDTH_MAX = 2* RADIUS_MAX ;
 const FRAME_HEIGHT_MAX = 2 * RADIUS_MAX;
 
 $(function () {
@@ -124,15 +121,15 @@ function calculatePositions(r1, r2, r3) {
      //Längen- und Breitengrad werden in x- und y-Position umgerechnet
         let x = gmynd.map(iso_code.longitude, -180, 180, 0, stageWidth);
         let y = gmynd.map(iso_code.latitude, -90, 90, stageHeight, 0);
-
+        
         
         //Radien für Kreise mappen
         let r1 = gmynd.map(iso_code.fossil_fuel_consumption, fossilFuelEnergyMin, fossilFuelEnergyMax, RADIUS_MIN, RADIUS_MAX);
-        let r2 = gmynd.map(iso_code.renewables_consumption, renewableEnergyMin, renewableEnergyMax, RADIUS_MIN, RADIUS_MAX);
-        let r3 = gmynd.map(iso_code.low_carbon_consumption, lowCarbonEnergyMin, lowCarbonEnergyMax, RADIUS_MIN, RADIUS_MAX);
+        let r2 = gmynd.map(iso_code.renewables_consumption, renewableEnergyMin, renewableEnergyMax, RADIUS_MIN, RADIUS_MAX/7.1);
+        let r3 = gmynd.map(iso_code.low_carbon_consumption, lowCarbonEnergyMin, lowCarbonEnergyMax, RADIUS_MIN, RADIUS_MAX/6.15);
         console.log(iso_code.country, r1, r2, r3);
 
-        let frame = $('<div></div>');
+/*         let frame = $('<div></div>');
 
         frame.addClass('frame')
         frame.css({
@@ -145,7 +142,7 @@ function calculatePositions(r1, r2, r3) {
         });
         frame.attr('data-country', iso_code.country);
         renderer.append(frame);
-        
+         */
         const circlePositions = calculatePositions(r1, r2, r3);
 
 
@@ -157,11 +154,28 @@ function calculatePositions(r1, r2, r3) {
             'background-color': 'red',
             'border-radius': '50%',
             'position': 'absolute',
-            'left': circlePositions.x1+FRAME_HEIGHT_MAX/2,
-            'top': circlePositions.y1+FRAME_WIDTH_MAX/2,
+            'left': circlePositions.x1+x,
+            'top': circlePositions.y1+y,
         });	
         fossilCircle.attr('data-value',  Math.round(r1*2))
-        fossilCircle.appendTo(frame);
+        fossilCircle.appendTo(renderer);
+
+        fossilCircle.click(() => {
+
+            $(".clicked").removeClass("clicked");
+
+            fossilCircle.addClass("clicked");
+
+            $("#clickLabel").html(iso_code.country+
+                '<br> Fossil Fuel Consumption: '+
+                iso_code.fossil_fuel_consumption+
+                '<br> Renewable Energy Consumption: '+
+                iso_code.renewables_consumption+
+                '<br> Low Carbon Consumption:'+
+                iso_code.low_carbon_consumption );
+        });
+
+
 
         let renewableCircle = $('<div></div>');
         renewableCircle.addClass('renewableCircle');
@@ -170,11 +184,11 @@ function calculatePositions(r1, r2, r3) {
             'width': Math.round(r2*2), 
             'border-radius': '50%',
             'position': 'absolute',
-            'left': circlePositions.x2+FRAME_HEIGHT_MAX/2,
-            'top': circlePositions.y2+FRAME_WIDTH_MAX/2,
+            'left': circlePositions.x2+x,
+            'top': circlePositions.y2+y,
         });	
         renewableCircle.attr('data-value',  Math.round(r2*2))
-        renewableCircle.appendTo(frame);
+        renewableCircle.appendTo(renderer);
 
         let lowCarbonCircle = $('<div></div>');
         lowCarbonCircle.addClass('lowCarbonCircle');
@@ -183,11 +197,11 @@ function calculatePositions(r1, r2, r3) {
             'width': Math.round(r3*2), 
             'border-radius': '50%',
             'position': 'absolute',
-            'left': circlePositions.x3+FRAME_HEIGHT_MAX/2,
-            'top': circlePositions.y3+FRAME_WIDTH_MAX/2,
+            'left': circlePositions.x3+x,
+            'top': circlePositions.y3+y,
         });	
         lowCarbonCircle.attr('data-value',  Math.round(r3*2))
-        lowCarbonCircle.appendTo(frame);
+        lowCarbonCircle.appendTo(renderer);
     });
 } 
  

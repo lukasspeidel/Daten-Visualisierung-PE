@@ -1,0 +1,49 @@
+* {
+
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+html, body {
+    height: 100%
+}
+
+body {
+    background-color: rgb(39, 39, 39);
+    color: white;
+    font-family: 'Fira Sans', sans-serif;
+}
+
+#renderer {
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.05);
+    position: relative;
+}
+
+/* HoverLabel und ClickLabel definieren, jeweils 5px Abstand zueinander */
+#hoverLabel, #clickLabel {
+    width: 100vw;
+    height: 30px;
+    margin: 0 0 5px 0;
+    background-color: rgba(255, 255, 255, 0.05);
+    /* Text in der Mitte des Divs positionieren -> line-height muss die Höhe vom DIV sein. */
+    line-height: 30px;
+}
+
+.dot {
+    background-color: white;
+    position: absolute;
+    border-radius: 100%;
+}
+
+/* Klasse / State: Hover über ein Land. */
+.hover {
+    background-color: gray;
+}
+
+/* Klasse / State: Land wurde geklickt */
+.clicked {
+    background-color: #FF0000;
+}
