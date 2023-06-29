@@ -20,9 +20,6 @@ body {
     position: relative;
 }
 
-
-
-
 .fossilCircle {
     border-radius: 50%;
     position: absolute;
@@ -57,4 +54,18 @@ body {
     font-size: 7px;
     padding: 5px;
     border-radius: 5px;
+}
+
+#toggleViewButton {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 150px;
+    height: 40px;
+    line-height: 40px;
+    font-size: 20px;
+    text-align: center;
+    background-color: #777;
+    border-radius: 3%;
 }

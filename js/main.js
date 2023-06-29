@@ -2,7 +2,7 @@ let stageHeight;
 let stageWidth;
 let renderer;
 
-const RADIUS_MIN = 3;
+const RADIUS_MIN = 1;
 const RADIUS_MAX = 20;
 
 
@@ -205,5 +205,62 @@ function calculatePositions(r1, r2, r3) {
     });
 } 
  
+function drawBarChart() {
+    toggleViewCheck = 'bar';
 
+    /* Breite und Kontinent mit max Anz. der an Ländern */
+    const barWidth = 100;
+    const countryData = gmynd.dataMax(cumulatedByContinent, 'count')
+
+    console.log(cumulatedByContinent);
+
+    /* Schleife durch die Kontinente, X-Position */
+    /*  Schreibweise: ES6, Destrukturierende Zuweisung / destructuring assignment 
+        Arraywerte und Objekteigenschaften können einfach Variablen zugeordnet werden. */
+
+    // Um hier auch direkt einen Index zu erhalten, kann man cumulatedData mit .entries() "konvertieren", zu einem array iterator. (hatte wir davor noch nicht kennengelernt).
+    for (let [indexContinents, continentData] of cumulatedByContinent.entries()) {
+        // X-Position für Bar und Label erstellen
+        // 0 * 50 * 2 = 0
+        // 1 * 50 * 2 = 100
+        // 2 * 50 * 2 = 200
+        // ...
+        const xPos = indexContinents * barWidth * 2;
+
+        let bar = $('<div></div>');
+        bar.addClass('bar');
+
+        // Berechnung der Höhe (3-Satz)
+        let barHeight = stageHeight / continentCountryMax * continentData.count
+        const yPos = stageHeight - barHeight;
+
+        bar.css({
+            'height': barHeight,
+            'width': barWidth,
+            'left': xPos,
+            'top': yPos,
+        })
+
+        $('#renderer').append(bar);
+
+
+        // Label für einen Kontinent generieren
+        let label = $("<div></div>");
+        label.text(continentData.continent);
+
+        $('#renderer').append(label);
+
+        label.width(barWidth);
+
+        label.css({
+            'left': xPos,
+            'top': stageHeight - label.height() - 10,
+            'position': 'absolute',
+            'color': 'black',
+            'z-index': 1000,
+            'text-align': 'center'
+        })
+
+    }
+}
 
