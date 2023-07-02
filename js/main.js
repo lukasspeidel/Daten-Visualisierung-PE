@@ -4,8 +4,8 @@ let renderer;
 let toggleviewcheck;
 let toggleViewButton = $('#toggleViewButton');
 
-const RADIUS_MIN = 1*3;
-const RADIUS_MAX = 20*3;
+const RADIUS_MIN = 1;
+const RADIUS_MAX = 20;
 
 const gdpMax = gmynd.dataMax(countryData, "GDP");
 const overallEnergyMax = gmynd.dataMax(countryData, "primary_energy_consumption");
@@ -20,19 +20,6 @@ const renewableEnergyMin = gmynd.dataMin(countryData, "renewables_consumption");
 const lowCarbonEnergyMin = gmynd.dataMin(countryData, "low_carbon_consumption");
 
 
-// [80, 45, 23]
-function createChart(count, parentCSS, arrChildCSS) {
-    const chart = $('<div class="chart"></div>');
-    chart.css(parentCSS);
-
-    for (let i = 0; i < count; i++) {
-        const child = $('<div class="bar"></div>');
-        child.css(arrChildCSS[i]);
-        chart.append(child);
-    }
-
-    return chart;
-}
 
 $(function () {
     renderer = $('#renderer');
@@ -162,20 +149,7 @@ function calculatePositions(r1, r2, r3) {
         let r3 = gmynd.map(iso_code.low_carbon_consumption, lowCarbonEnergyMin, lowCarbonEnergyMax, RADIUS_MIN, RADIUS_MAX/6.15);
         console.log(iso_code.country, r1, r2, r3);
 
-/*         let frame = $('<div></div>');
 
-        frame.addClass('frame')
-        frame.css({
-            'height': FRAME_HEIGHT_MAX,
-            'width': FRAME_WIDTH_MAX,
-
-            'position': 'absolute',
-            'left': x,
-            'top': y,
-        });
-        frame.attr('data-country', iso_code.country);
-        renderer.append(frame);
-         */
         const circlePositions = calculatePositions(r1, r2, r3);
 
 
@@ -283,6 +257,20 @@ function drawBarChart() {
 
     console.log(cumulatedByContinent);
 }
+// [80, 45, 23]
+function createChart(count, parentCSS, arrChildCSS) {
+    toggleViewCheck = 'chart';
+    const chart = $('<div class="chart"></div>');
+    chart.css(parentCSS);
+
+    for (let i = 0; i < count; i++) {
+        const child = $('<div class="bar"></div>');
+        child.css(arrChildCSS[i]);
+        chart.append(child);
+    }
+
+    return chart;
+}
 
 function toggleView() {
 
@@ -292,7 +280,7 @@ function toggleView() {
     /*  Wenn vorher die Map aktiv war, die Funktion für das BarChart aufrufen.
         Wenn vorher das BarChart aktiv war, die Funktion für die Map aufrufen. */
     if (toggleViewCheck == 'map') {
-        drawBarChart();
+        createChart();
     } else {
         drawMap();
     }
