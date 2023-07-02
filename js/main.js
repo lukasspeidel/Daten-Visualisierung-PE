@@ -1,13 +1,38 @@
 let stageHeight;
 let stageWidth;
 let renderer;
+let toggleviewcheck;
+let toggleViewButton = $('#toggleViewButton');
 
-const RADIUS_MIN = 1;
-const RADIUS_MAX = 20;
+const RADIUS_MIN = 1*3;
+const RADIUS_MAX = 20*3;
+
+const gdpMax = gmynd.dataMax(countryData, "GDP");
+const overallEnergyMax = gmynd.dataMax(countryData, "primary_energy_consumption");
+const fossilFuelEnergyMax = gmynd.dataMax(countryData, "fossil_fuel_consumption");
+const renewableEnergyMax = gmynd.dataMax(countryData, "renewables_consumption");
+const lowCarbonEnergyMax = gmynd.dataMax(countryData, "low_carbon_consumption");
+
+const gdpMin = gmynd.dataMin(countryData, "GDP");
+const overallEnergyMin = gmynd.dataMin(countryData, "primary_energy_consumption");
+const fossilFuelEnergyMin = gmynd.dataMin(countryData, "fossil_fuel_consumption");
+const renewableEnergyMin = gmynd.dataMin(countryData, "renewables_consumption");
+const lowCarbonEnergyMin = gmynd.dataMin(countryData, "low_carbon_consumption");
 
 
-const FRAME_WIDTH_MAX = 2* RADIUS_MAX ;
-const FRAME_HEIGHT_MAX = 2 * RADIUS_MAX;
+// [80, 45, 23]
+function createChart(count, parentCSS, arrChildCSS) {
+    const chart = $('<div class="chart"></div>');
+    chart.css(parentCSS);
+
+    for (let i = 0; i < count; i++) {
+        const child = $('<div class="bar"></div>');
+        child.css(arrChildCSS[i]);
+        chart.append(child);
+    }
+
+    return chart;
+}
 
 $(function () {
     renderer = $('#renderer');
@@ -20,23 +45,30 @@ $(function () {
 
     drawMap();
 
-    //test();
+    toggleViewButton.click(toggleView);
 
+    const max = Math.max(fossilFuelEnergyMax, renewableEnergyMax, lowCarbonEnergyMax)
+
+    for (let i = 0; i < countryData.length; i++) {
+        const chart = createChart(3, {}, [
+            {
+                height: (countryData[i].fossil_fuel_consumption / max) * 400,
+                backgroundColor: 'red'
+            },
+            { 
+                height: (countryData[i].renewables_consumption / max) * 400,
+                backgroundColor: 'green'
+            },
+            {
+                height: (countryData[i].low_carbon_consumption / max) * 400,
+                backgroundColor: 'blue'
+            }
+        ])
+        $(".charts").append(chart);
+    }
 });
 
-    const gdpMax = gmynd.dataMax(countryData, "GDP");
-    const overallEnergyMax = gmynd.dataMax(countryData, "primary_energy_consumption");
-    const fossilFuelEnergyMax = gmynd.dataMax(countryData, "fossil_fuel_consumption");
-    const renewableEnergyMax = gmynd.dataMax(countryData, "renewables_consumption");
-    const lowCarbonEnergyMax = gmynd.dataMax(countryData, "low_carbon_consumption");
- 
-    const gdpMin = gmynd.dataMin(countryData, "GDP");
-    const overallEnergyMin = gmynd.dataMin(countryData, "primary_energy_consumption");
-    const fossilFuelEnergyMin = gmynd.dataMin(countryData, "fossil_fuel_consumption");
-    const renewableEnergyMin = gmynd.dataMin(countryData, "renewables_consumption");
-    const lowCarbonEnergyMin = gmynd.dataMin(countryData, "low_carbon_consumption");
-
-     /* Funktion um Daten vorzubereiten Merge und delete */
+/* Funktion um Daten vorzubereiten Merge und delete */
 function prepareData() {
      /* Maxima werden ermittelt */
      console.log("Gdp Max:" + gdpMax);
@@ -51,7 +83,7 @@ function prepareData() {
      console.log("Renewable Energy Min:" + renewableEnergyMin);
      console.log("Low Carbon Min:" + lowCarbonEnergyMin);
 
-
+    gmynd.sortData(countryData, "-GDP");
 }   
 
     // Takes three radiuses and returns the position of the centers of the three circles 
@@ -116,6 +148,7 @@ function calculatePositions(r1, r2, r3) {
 
 
  function drawMap() {
+    toggleViewcheck = 'map'
 
     countryData.forEach(iso_code => {
      //Längen- und Breitengrad werden in x- und y-Position umgerechnet
@@ -151,7 +184,6 @@ function calculatePositions(r1, r2, r3) {
         fossilCircle.css({
             'height': Math.round(r1*2), 
             'width': Math.round(r1*2), 
-            'background-color': 'red',
             'border-radius': '50%',
             'position': 'absolute',
             'left': circlePositions.x1+x,
@@ -159,12 +191,12 @@ function calculatePositions(r1, r2, r3) {
         });	
         fossilCircle.attr('data-value',  Math.round(r1*2))
         fossilCircle.appendTo(renderer);
-
-        fossilCircle.click(() => {
+        fossilCircle.on("click", function () {
+            console.log(this);
 
             $(".clicked").removeClass("clicked");
 
-            fossilCircle.addClass("clicked");
+            $(this).addClass("clicked");
 
             $("#clickLabel").html(iso_code.country+
                 '<br> Fossil Fuel Consumption: '+
@@ -174,8 +206,6 @@ function calculatePositions(r1, r2, r3) {
                 '<br> Low Carbon Consumption:'+
                 iso_code.low_carbon_consumption );
         });
-
-
 
         let renewableCircle = $('<div></div>');
         renewableCircle.addClass('renewableCircle');
@@ -189,6 +219,21 @@ function calculatePositions(r1, r2, r3) {
         });	
         renewableCircle.attr('data-value',  Math.round(r2*2))
         renewableCircle.appendTo(renderer);
+        renewableCircle.on("click", function () {
+            console.log(this);
+
+            $(".clicked").removeClass("clicked");
+
+            $(this).addClass("clicked");
+
+            $("#clickLabel").html(iso_code.country+
+                '<br> Fossil Fuel Consumption: '+
+                iso_code.fossil_fuel_consumption+
+                '<br> Renewable Energy Consumption: '+
+                iso_code.renewables_consumption+
+                '<br> Low Carbon Consumption:'+
+                iso_code.low_carbon_consumption );
+        });
 
         let lowCarbonCircle = $('<div></div>');
         lowCarbonCircle.addClass('lowCarbonCircle');
@@ -202,65 +247,53 @@ function calculatePositions(r1, r2, r3) {
         });	
         lowCarbonCircle.attr('data-value',  Math.round(r3*2))
         lowCarbonCircle.appendTo(renderer);
+        lowCarbonCircle.on("click", function () {
+            console.log(this);
+
+            $(".clicked").removeClass("clicked");
+
+            $(this).addClass("clicked");
+
+            $("#clickLabel").html(iso_code.country+
+                '<br> Fossil Fuel Consumption: '+
+                iso_code.fossil_fuel_consumption+
+                '<br> Renewable Energy Consumption: '+
+                iso_code.renewables_consumption+
+                '<br> Low Carbon Consumption:'+
+                iso_code.low_carbon_consumption );
+        });
     });
 } 
  
 function drawBarChart() {
     toggleViewCheck = 'bar';
 
+    //Daten sortieren nach Gdp
+    const compareByValue = (a, b) => b.value - a.value;
+
+    sortedByGdp = countryData.sort(compareByValue)
+
+    console.log(sortedByGdp);
+
+
+
     /* Breite und Kontinent mit max Anz. der an Ländern */
-    const barWidth = 100;
-    const countryData = gmynd.dataMax(cumulatedByContinent, 'count')
+    const barWidth = 30;
+
 
     console.log(cumulatedByContinent);
-
-    /* Schleife durch die Kontinente, X-Position */
-    /*  Schreibweise: ES6, Destrukturierende Zuweisung / destructuring assignment 
-        Arraywerte und Objekteigenschaften können einfach Variablen zugeordnet werden. */
-
-    // Um hier auch direkt einen Index zu erhalten, kann man cumulatedData mit .entries() "konvertieren", zu einem array iterator. (hatte wir davor noch nicht kennengelernt).
-    for (let [indexContinents, continentData] of cumulatedByContinent.entries()) {
-        // X-Position für Bar und Label erstellen
-        // 0 * 50 * 2 = 0
-        // 1 * 50 * 2 = 100
-        // 2 * 50 * 2 = 200
-        // ...
-        const xPos = indexContinents * barWidth * 2;
-
-        let bar = $('<div></div>');
-        bar.addClass('bar');
-
-        // Berechnung der Höhe (3-Satz)
-        let barHeight = stageHeight / continentCountryMax * continentData.count
-        const yPos = stageHeight - barHeight;
-
-        bar.css({
-            'height': barHeight,
-            'width': barWidth,
-            'left': xPos,
-            'top': yPos,
-        })
-
-        $('#renderer').append(bar);
-
-
-        // Label für einen Kontinent generieren
-        let label = $("<div></div>");
-        label.text(continentData.continent);
-
-        $('#renderer').append(label);
-
-        label.width(barWidth);
-
-        label.css({
-            'left': xPos,
-            'top': stageHeight - label.height() - 10,
-            'position': 'absolute',
-            'color': 'black',
-            'z-index': 1000,
-            'text-align': 'center'
-        })
-
-    }
 }
 
+function toggleView() {
+
+    /* Stage leeren */
+    renderer.empty();
+
+    /*  Wenn vorher die Map aktiv war, die Funktion für das BarChart aufrufen.
+        Wenn vorher das BarChart aktiv war, die Funktion für die Map aufrufen. */
+    if (toggleViewCheck == 'map') {
+        drawBarChart();
+    } else {
+        drawMap();
+    }
+}

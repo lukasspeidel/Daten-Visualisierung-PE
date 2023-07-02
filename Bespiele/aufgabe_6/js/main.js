@@ -97,31 +97,12 @@ function drawMap() {
 function drawBarChart() {
     toggleViewCheck = 'bar';
 
-    // Iteration über Array mit ForEach
-    // cumulatedByContinent.forEach((continentName, index) => {
-    //     console.log(continentName, index);
-    // });
+    //Daten sortieren nach Gdp
+    const compareByValue = (a, b) => b.value - a.value;
 
-    // /*  Iteration über Array For ... in
-    //     For ... in kann durch Arrays und Objekte iterieren */
-    // for (let continentName in cumulatedByContinent) {
-    //     console.log(continentName, cumulatedByContinent[continentName]);
-    // }
-
-    // /*  Iteration über Array mit For ... of
-    //     Hier bekommen wir nur das Kontinent-Objekt zurück, keinen Schleifenzähler + Name + Anzahl Länder
-    // for (let continent of cumulatedByContinent) {
-    //     console.log(continent, continent.count);
-    // }
-
-    // /*  Iteration über Array mit For ... of
-    //     Hier fehlt noch der Schleifenzähler für die xPos
-    // for (let { continent: continentName, count: continentCountryCount } of cumulatedByContinent) {
-    //     console.log(continentName, continentCountryCount);
-    // }
-
+    data.sort(compareByValue)
     /* Breite und Kontinent mit max Anz. der an Ländern */
-    const barWidth = 100;
+    const barWidth = 30;
     const continentCountryMax = gmynd.dataMax(cumulatedByContinent, 'count')
 
     console.log(cumulatedByContinent);
