@@ -2,7 +2,9 @@ let stageHeight;
 let stageWidth;
 let renderer;
 let toggleviewcheck;
-let toggleViewButton = $('#toggleViewButton');
+let toggleViewButton;
+let charts;
+let clickLabel;
 
 const RADIUS_MIN = 1;
 const RADIUS_MAX = 20;
@@ -19,12 +21,20 @@ const fossilFuelEnergyMin = gmynd.dataMin(countryData, "fossil_fuel_consumption"
 const renewableEnergyMin = gmynd.dataMin(countryData, "renewables_consumption");
 const lowCarbonEnergyMin = gmynd.dataMin(countryData, "low_carbon_consumption");
 
+let isRendererDisplayed;
+let toShowClickLabel = false;
 
+const isChartsOff = () => charts.css("display") === "none";
+const isClickLabelOff = () => charts.css("display") === "none";
 
 $(function () {
     renderer = $('#renderer');
     stageHeight = renderer.innerHeight();
     stageWidth = renderer.innerWidth();
+
+    charts = $(".charts");
+    toggleViewButton = $('#toggleViewButton')
+    clickLabel = $('#clickLabel');
 
     prepareData();
     
@@ -53,6 +63,20 @@ $(function () {
         ])
         $(".charts").append(chart);
     }
+
+    isRendererDisplayed = true;
+    charts.hide();
+    clickLabel.hide();
+
+    $(".circle").on("mouseenter", function() {
+        if (!toShowClickLabel) clickLabel.show();
+    });
+    $(".circle").on("mouseleave", function() {
+        if (!toShowClickLabel) clickLabel.hide();
+    });
+    $(".circle").on("click", function() {
+        toShowClickLabel = !toShowClickLabel;
+    });
 });
 
 /* Funktion um Daten vorzubereiten Merge und delete */
@@ -96,45 +120,7 @@ function calculatePositions(r1, r2, r3) {
     return {x1: -mx, y1: -my, x2: r2, y2: -my, x3:xi-mx, y3:-yi-my};
 }
 
-/* function test() {
-    circlePositions = calculatePositions(r1, r2, r3);
-    console.log(circlePositions);
-
-    let fossilCircle = $('<div></div>');
-    fossilCircle.addClass('fossilCircle');
-    fossilCircle.css({
-        'height': r1 * 2, 
-        'width': r1 * 2, 
-        'left': circlePositions.x1+testCords,
-        'top': circlePositions.y1+testCords,
-    });	
-    fossilCircle.appendTo(renderer);
-
-    let renewableCircle = $('<div></div>');
-    renewableCircle.addClass('renewableCircle');
-    renewableCircle.css({
-        'height': r2 * 2, 
-        'width': r2 * 2, 
-        'background-color': 'green',
-        'left': circlePositions.x2+testCords,
-        'top': circlePositions.y2+testCords,
-    });	
-    renewableCircle.appendTo(renderer);
-
-    let lowCarbonCircle = $('<div></div>');
-    lowCarbonCircle.addClass('lowCarbonCircle');
-    lowCarbonCircle.css({
-        'height': r3 * 2, 
-        'width': r3 * 2, 
-        'background-color': 'yellow',
-        'left': circlePositions.x3+testCords,
-        'top': circlePositions.y3+testCords,
-    });	
-    lowCarbonCircle.appendTo(renderer); 
-}   */ 
-
-
- function drawMap() {
+function drawMap() {
     toggleViewcheck = 'map'
 
     countryData.forEach(iso_code => {
@@ -153,7 +139,7 @@ function calculatePositions(r1, r2, r3) {
         const circlePositions = calculatePositions(r1, r2, r3);
 
 
-        let fossilCircle = $('<div></div>');
+        let fossilCircle = $('<div class="circle"></div>');
         fossilCircle.addClass('fossilCircle');
         fossilCircle.css({
             'height': Math.round(r1*2), 
@@ -239,24 +225,7 @@ function calculatePositions(r1, r2, r3) {
     });
 } 
  
-function drawBarChart() {
-    toggleViewCheck = 'bar';
 
-    //Daten sortieren nach Gdp
-    const compareByValue = (a, b) => b.value - a.value;
-
-    sortedByGdp = countryData.sort(compareByValue)
-
-    console.log(sortedByGdp);
-
-
-
-    /* Breite und Kontinent mit max Anz. der an Ländern */
-    const barWidth = 30;
-
-
-    console.log(cumulatedByContinent);
-}
 // [80, 45, 23]
 function createChart(count, parentCSS, arrChildCSS) {
     toggleViewCheck = 'chart';
@@ -272,16 +241,27 @@ function createChart(count, parentCSS, arrChildCSS) {
     return chart;
 }
 
+
+
 function toggleView() {
 
     /* Stage leeren */
-    renderer.empty();
+    // renderer.empty();
 
     /*  Wenn vorher die Map aktiv war, die Funktion für das BarChart aufrufen.
         Wenn vorher das BarChart aktiv war, die Funktion für die Map aufrufen. */
     if (toggleViewCheck == 'map') {
         createChart();
+        createChartView();
     } else {
         drawMap();
+    }
+
+    if (isChartsOff()) {
+        charts.show();
+        renderer.hide();
+    } else {
+        charts.hide();
+        renderer.show();
     }
 }
