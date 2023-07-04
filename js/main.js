@@ -5,6 +5,7 @@ let toggleviewcheck;
 let toggleViewButton;
 let charts;
 let clickLabel;
+let sortcheck;
 
 const RADIUS_MIN = 1;
 const RADIUS_MAX = 20;
@@ -263,5 +264,22 @@ function toggleView() {
     } else {
         charts.hide();
         renderer.show();
+    }
+}
+
+function sortBars(sortcheck) {
+switch (sortCheck) {
+    case 'highestGDP':
+        gmynd.sortData(countryData, "GDP");
+        break;
+    case 'lowestGDP':
+        gmynd.sortData(countryData, "-GDP");
+        break;
+    case 'highestPopulation':
+        gmynd.sortData(countryData, "-population");
+        break;
+    case 'lowestPopulation':
+        gmynd.sortData(countryData, "population");
+        break;
     }
 }
