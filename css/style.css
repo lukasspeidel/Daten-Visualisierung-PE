@@ -1,150 +1,423 @@
-*, *::before, *::after {
+:root {
+	--bg-dark-color: rgb(39, 39, 39);
+	--bg-darker-color: hsl(0, 0%, 10%);
 
-    box-sizing: border-box; 
-    padding: 0;
-    margin: 0;
+	/* Bars */
+	--bars-border-radius: 1rem;
+	--bars-margin-left: 4px;
+
+	/* Bar */
+	--bar-width: 1rem;
+
+	/* Chart */
+	--chart-width: calc(var(--bar-width) * 3 + var(--bars-margin-left) * 2);
 }
 
-html, body {
-    width: 100%;
-    height: 100%;
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+	padding: 0;
+	margin: 0;
+}
+
+::-webkit-scrollbar {
+	width: 7px;
+	height: 7px;
+	border-radius: 1rem;
+}
+
+::-webkit-scrollbar-track {
+	background-color: var(--bg-dark-color);
+}
+
+::-webkit-scrollbar-thumb {
+	background: #888;
+}
+
+::-webkit-scrollbar-thumb:hover {
+	background: #555;
+}
+
+html,
+body {
+	width: 100%;
+	height: 100%;
 }
 
 body {
-    background-color: rgb(39,39,39);
-    color:white;
-    font-family: 'Fira Sans', sans-serif;
-    height: 100vh;
+	background-color: var(--bg-dark-color);
+	color: white;
+	font-family: "Fira Sans", sans-serif;
+	height: 100vh;
 }
 
 #renderer {
-    width: 100%;
-    height: 100%;
-    background-color: rgba(255, 255, 255, 0.05);
-    position: relative;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(255, 255, 255, 0.05);
+	position: relative;
+}
+
+.view {
+	height: 100%;
+}
+
+.circle:hover {
+	cursor: pointer;
 }
 
 .fossilCircle {
-    border-radius: 50%;
-    position: absolute;
-    translate: -50% -50%;
-    background-color: #B0ADAD;
+	border-radius: 50%;
+	position: absolute;
+	translate: -50% -50%;
+	background-color: #b0adad;
 }
 
-
 .renewableCircle {
-    border-radius: 50%;
-    position: absolute;
-    translate: -50% -50%;
-    background-color: #92FF76;
+	border-radius: 50%;
+	position: absolute;
+	translate: -50% -50%;
+	background-color: #92ff76;
 }
 
 .lowCarbonCircle {
-    border-radius: 50%;
-    position: absolute;
-    translate: -50% -50%;
-    background-color: #66F8BB;
+	border-radius: 50%;
+	position: absolute;
+	translate: -50% -50%;
+	background-color: #66f8bb;
+}
+
+.debug {
+	outline: 1px solid red;
+}
+
+.clip-x {
+	overflow-x: hidden;
+}
+
+.clip-y {
+	overflow-y: hidden;
+}
+
+.clip {
+	overflow: hidden;
 }
 
 #clickLabel {
-    width: 25%;
-    height: 60px;
-    top: 75%;
-    left: 70%;
-    background-color: rgba(255, 255, 255, 0.05);
-    /* Text in der Mitte des Divs positionieren -> line-height muss die Höhe vom DIV sein. */
-    line-height: 10px;
-    position: absolute;
-    font-size: 7px;
-    padding: 5px;
-    border-radius: 5px;
+	width: 25%;
+	height: 60px;
+	top: 75%;
+	left: 70%;
+	background-color: rgba(255, 255, 255, 0.05);
+	/* Text in der Mitte des Divs positionieren -> line-height muss die Höhe vom DIV sein. */
+	line-height: 10px;
+	position: absolute;
+	font-size: 7px;
+	padding: 5px;
+	border-radius: 5px;
 }
 
 #toggleViewButton {
-    position: absolute;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 150px;
-    height: 40px;
-    line-height: 40px;
-    font-size: 20px;
-    text-align: center;
-    background-color: #777;
-    border-radius: 3%;
+	position: absolute;
+	bottom: 20px;
+	left: 50%;
+	transform: translateX(-50%);
+	width: 150px;
+	height: 40px;
+	line-height: 40px;
+	font-size: 20px;
+	text-align: center;
+	background-color: #777;
+	border-radius: 3%;
+	text-transform: uppercase;
 }
 
-.chart {
-    display: flex;
-    width: 30px;
-    height: auto;
+#toggleViewButton:hover {
+	cursor: pointer;
+	background-color: hsl(0, 0%, 40%);
 }
 
-.chart + .chart {
-    margin-left: 4px;
+.red {
+	background-color: red;
 }
 
-.chart-container {
-    position: absolute;
-    top: 50px;
-    left: 50px;
-    width: 100%;
-    height: 400px;
-    padding-top: 20px;
-    max-width: 2560px;
-    margin: 0 auto;
-    overflow-x: scroll;
+.blue {
+	background-color: blue;
 }
 
-.flex {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
+.green {
+	background-color: green;
 }
+
+.biofuel {
+	background-color: #d344d6;
+}
+.gas {
+	background-color: #b1f7fc;
+}
+.coal {
+	background-color: #93c034;
+}
+.oil {
+	background-color: #b52c2c;
+}
+.nuclear {
+	background-color: #f2f625;
+}
+.hydro {
+	background-color: #15137e;
+}
+.solar {
+	background-color: #94fb7a;
+}
+.wind {
+	background-color: #8effff;
+}
+
+/* ############################################################### */
 
 .charts {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 400%;
-    height: 100%;
+	position: relative;
+	/* display: flex;
+	flex-direction: row; */
+	gap: 8rem;
+	padding: 2rem 2rem 1rem 2rem;
+	height: 80%;
+	background-color: var(--bg-dark-color);
+	padding: 0 2rem;
+	margin-right: 2rem;
 }
 
 .chart {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    max-width: 30px;
+	position: absolute;
+	bottom: 2rem;
+
+	width: var(--chart-width);
+
+	display: flex;
+	height: auto;
+	justify-content: space-between;
+	align-items: flex-end;
+
+	min-height: 2rem; /* for hover area */
+
+	transition: left 1.25s cubic-bezier(0.19, 1, 0.22, 1), scale 0.25s ease;
+}
+
+.chart:hover {
+	cursor: pointer;
+	scale: 0.97;
+	transition: scale 0.5s cubic-bezier(0.39, 0.575, 0.565, 1);
+	transform-origin: bottom;
+}
+
+.chart:nth-child(2) bars {
+	opacity: 0.4;
+}
+
+.bars {
+	border-radius: var(--bars-border-radius);
+	transition: background-color 0.5s cubic-bezier(0.39, 0.575, 0.565, 1);
+}
+
+.bars + .bars {
+	margin-left: var(--bars-margin-left);
 }
 
 .bar {
-    width: 30%;
-    border-radius: 5px;
+	width: var(--bar-width);
+	border-radius: var(--bars-border-radius);
+	transition: border-radius 0.5s cubic-bezier(0.39, 0.575, 0.565, 1),
+		translate 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55),
+		scale 1.25s cubic-bezier(0.68, -0.55, 0.265, 1.55), opacity 1s ease;
+	transform-origin: bottom;
+	translate: 0 0;
+	scale: 1 1;
+	opacity: 1;
 }
 
-/* .chart .chart {
-    flex: 1;
-    gap: 4px;
+.bar.off {
+	translate: 0 -100%;
+	scale: 1 0.1;
+	opacity: 0;
+	transition: all 0.5s cubic-bezier(0.39, 0.575, 0.565, 1);
 }
 
-.bar {
-    flex: 1;
-    height: 100%;
-    z-index: 1000;
+.bar.off[data-value] {
+	transition-delay: 0s;
 }
 
-.chart .chart .bar {
-    border-radius: 12px;
+.bar[data-value="coal"],
+.bar[data-value="nuclear"],
+.bar[data-value="solar"] {
+	transition-delay: 0.125s;
 }
 
-.bar:nth-child(1), .chart .chart .bar:nth-child(1) {
-    background-color: #B0ADAD;
+.bar[data-value="gas"] {
+	transition-delay: 0.25s;
 }
 
-.chart .chart  .bar:nth-child(2) {
-    background-color: #66F8BB;
+.bar[data-value="biofuel"] {
+	transition-delay: 0.375s;
 }
 
-.chart .chart  .bar:nth-child(3) {
-    background-color: #92FF76;
-} */
+.footer {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	grid-template-rows: 1fr;
+	place-content: center;
+}
+
+.buttons {
+	display: flex;
+	flex-direction: row;
+	gap: 3rem;
+	background-color: var(--bg-darker-color);
+	padding: 2rem;
+}
+
+.sorting {
+	position: relative;
+	display: flex;
+	gap: 1rem;
+}
+
+.sorting::after {
+	content: "";
+	position: absolute;
+	bottom: -1rem;
+	left: 50%;
+	width: 0.5rem;
+	height: 0.5rem;
+	border-radius: 50%;
+	translate: -275% 0;
+	opacity: 0;
+	scale: 0.75;
+	background-color: aliceblue;
+
+	transition: translate 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.125),
+		opacity 0.5s ease, scale 1.5s ease;
+}
+
+.sorting:has(button#sort-1.selected:focus)::after {
+	translate: -115px 0;
+	opacity: 1;
+	scale: 1 1;
+
+	transition: translate 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.125),
+		opacity 0.5s ease, scale 1.5s ease;
+}
+
+.sorting:has(button#sort-2.selected:focus)::after {
+	translate: 88px 0;
+	opacity: 1;
+	scale: 1 1;
+
+	transition: translate 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.125),
+		opacity 0.5s ease;
+}
+
+.buttons,
+.marquee {
+	margin-top: calc(1rem - 7px);
+}
+
+button {
+	height: 40px;
+	border-radius: 5px;
+	background-color: #d9d9d9;
+	border: none;
+	border-radius: 1.75rem;
+	color: black;
+	font-size: 90%;
+	padding: 0.5rem 1.25rem;
+	scale: 1;
+	transform-origin: bottom;
+
+	transition: background-color 0.5s cubic-bezier(0.39, 0.575, 0.565, 1),
+		scale 0.5s ease;
+}
+
+button:hover {
+	cursor: pointer;
+	background-color: hsl(0, 0%, 70%);
+	scale: 0.975;
+
+	transition: background-color 0.25s cubic-bezier(0.39, 0.575, 0.565, 1),
+		scale 0.5s ease;
+}
+
+button:focus,
+.selected {
+	background-color: hsl(0, 0%, 50%);
+	transition: background-color 0.25s cubic-bezier(0.39, 0.575, 0.565, 1),
+		scale 0.5s ease;
+}
+
+.selected {
+	border: 2px solid white;
+	color: white;
+}
+
+#btn-portions.selected {
+	background-color: wheat;
+	border: 2px solid hsl(39, 77%, 13%);
+	color: hsl(39, 77%, 13%);
+}
+
+#sort-1,
+#sort-2 {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+}
+
+#sort-1::after,
+#sort-2::after {
+	content: "(" attr(data-order) ")";
+	font-size: 100%;
+	font-family: monospace;
+}
+
+.chartLabel {
+	position: absolute;
+	padding: 1rem 1.25rem;
+	top: 2rem;
+	left: 2rem;
+	width: 480px;
+	height: 200px;
+	background-color: wheat;
+	color: hsl(39, 77%, 13%);
+	border-radius: var(--bars-border-radius);
+
+	translate: 0 1rem;
+	transition: translate 0.5s ease-out;
+}
+
+.chartLabel.hovered {
+	translate: 0 0;
+	transition: translate 0.5s ease-out;
+}
+
+h1 {
+	font-size: 2.25rem;
+	margin-bottom: 1rem;
+}
+
+.text {
+	font-size: 1.25rem;
+}
+
+.text + p {
+	margin-top: 0.125rem;
+}
+
+.row:nth-child(1) {
+	margin-bottom: 0.75rem;
+}
+
+.marquee {
+	height: calc(100% - 10px);
+	background-color: var(--bg-darker-color);
+}

@@ -1,25 +1,58 @@
 <!DOCTYPE html>
 <html lang="de">
+	<head>
+		<meta charset="UTF-8" />
+		<title>Lukas Dots</title>
+		<script src="lib/jquery-3.6.0.min.js"></script>
+		<script src="lib/gmynd.js"></script>
+		<link rel="stylesheet" href="css/style.css" />
+	</head>
 
-<head>
-    <meta charset="UTF-8">
-    <title>Lukas Dots</title>
-    <script src="lib/jquery-3.6.0.min.js"></script>
-    <script src="lib/gmynd.js"></script>
-    <link rel="stylesheet" href="css/style.css">
-</head>
+	<body>
+		<div id="renderer">
+			<div id="clickLabel"></div>
+		</div>
 
-<body>
-    <div id="renderer">
-        <div id="clickLabel"></div>
-    </div>
-    <div class="charts flex"></div>
+		<div class="view">
+			<div class="charts clip-y"></div>
 
-    <div id="toggleViewButton" class="m-5">TOGGLE</div>
+			<div class="footer">
+				<div class="buttons">
+					<button id="btn-portions">
+						Show different energy portions
+					</button>
+					<div class="sorting">
+						<button id="sort-1" data-attr="gdp" class="selected">
+							Sort by GDP
+						</button>
+						<button id="sort-2" data-attr="population">
+							Sort by population
+						</button>
+					</div>
+				</div>
+				<!-- https://codepen.io/marknotton/pen/NWqwqqj -->
+				<div class="marquee"></div>
+			</div>
 
-<!--     <script src="data/EnergyPositionGdpData.js"></script> -->
-    <script src="data/EnergyDataRevised.js"></script>
-    <script src="js/main.js"></script>
-</body>
+			<div class="chartLabel">
+				<h1 id="label-h1">China</h1>
+				<div class="rows">
+					<div class="row">
+						<h2 class="text">GDP</h2>
+						<p id="label-gdp">18151620000000</p>
+					</div>
+					<div class="row">
+						<h2 class="text">Population</h2>
+						<p id="label-population">1427648000</p>
+					</div>
+				</div>
+			</div>
+		</div>
 
+		<div id="toggleViewButton" class="m-5">Toggle</div>
+
+		<!-- <script src="data/EnergyPositionGdpData.js"></script> -->
+		<script src="data/EnergyDataRevised.js"></script>
+		<script src="js/main.js"></script>
+	</body>
 </html>
