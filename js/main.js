@@ -172,14 +172,17 @@ function drawMap() {
 			$(this).addClass("clicked");
 
 			$("#clickLabel").html(
-				iso_code.country +
-					"<br> Fossil Fuel Consumption: " +
-					iso_code.fossil_fuel_consumption +
-					"<br> Renewable Energy Consumption: " +
-					iso_code.renewables_consumption +
-					"<br> Low Carbon Consumption:" +
-					iso_code.low_carbon_consumption
-			);
+				"<h1>" +
+				iso_code.country +	"</h1>" +
+			
+				"<br> Fossil Fuel Consumption: " +
+				iso_code.fossil_fuel_consumption + " TWh" +
+				"<br> Renewable Energy Consumption: " +
+				iso_code.renewables_consumption + " TWh" +
+				"<br> Low Carbon Consumption: <br>" +
+				iso_code.low_carbon_consumption + " TWh"
+			  );
+			  
 		});
 
 		let renewableCircle = $("<div class='circle'></div>");
@@ -423,9 +426,6 @@ $(function () {
 				sortChartsBy(currentButton.attr("data-attr"), order)
 			);
 
-			/* setTimeout(() => {
-				charts.removeClass("clip-x");
-			}, 1000); */
 
 			currentButton.attr("data-order", order);
 			charts.scrollLeft(0);
