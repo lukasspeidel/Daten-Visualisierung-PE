@@ -35,8 +35,8 @@ let buttons;
 let isAscendingGDP = true;
 let isAscendingPop = true;
 
-const RADIUS_MIN = 1;
-const RADIUS_MAX = 20;
+const RADIUS_MIN = 1*2;
+const RADIUS_MAX = 20*2;
 const BAR_HEIGHT_MAX = 200;
 
 // sh. style.css: --chart-width: calc(var(--bar-width) * 3 + var(--bars-margin-left) * 2);
@@ -205,13 +205,15 @@ function drawMap() {
 			$(this).addClass("clicked");
 
 			$("#clickLabel").html(
-				iso_code.country +
-					"<br> Fossil Fuel Consumption: " +
-					iso_code.fossil_fuel_consumption +
-					"<br> Renewable Energy Consumption: " +
-					iso_code.renewables_consumption +
-					"<br> Low Carbon Consumption:" +
-					iso_code.low_carbon_consumption
+				"<h1>" +
+				iso_code.country +	"</h1>" +
+			
+				"<br> Fossil Fuel Consumption: " +
+				iso_code.fossil_fuel_consumption + " TWh" +
+				"<br> Renewable Energy Consumption: " +
+				iso_code.renewables_consumption + " TWh" +
+				"<br> Low Carbon Consumption: <br>" +
+				iso_code.low_carbon_consumption + " TWh"
 			);
 		});
 
@@ -235,13 +237,15 @@ function drawMap() {
 			$(this).addClass("clicked");
 
 			$("#clickLabel").html(
-				iso_code.country +
-					"<br> Fossil Fuel Consumption: " +
-					iso_code.fossil_fuel_consumption +
-					"<br> Renewable Energy Consumption: " +
-					iso_code.renewables_consumption +
-					"<br> Low Carbon Consumption:" +
-					iso_code.low_carbon_consumption
+				"<h1>" +
+				iso_code.country +	"</h1>" +
+			
+				"<br> Fossil Fuel Consumption: " +
+				iso_code.fossil_fuel_consumption + " TWh" +
+				"<br> Renewable Energy Consumption: " +
+				iso_code.renewables_consumption + " TWh" +
+				"<br> Low Carbon Consumption: <br>" +
+				iso_code.low_carbon_consumption + " TWh"
 			);
 		});
 	});
